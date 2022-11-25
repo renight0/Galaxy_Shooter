@@ -39,10 +39,9 @@ public class Enemy : MonoBehaviour
         if (other.transform.tag == "Laser")
         {
             
-
             spawnManager.DecreaseEnemyCount();
-            _player.EarnScorePoints(10);
-
+            if (_player != null) { _player.EarnScorePoints(10); }
+            
             Destroy(this.gameObject);
             Destroy(other.gameObject);
 
@@ -51,9 +50,8 @@ public class Enemy : MonoBehaviour
         {
             //Debug.Log("Player loses health");
             spawnManager.DecreaseEnemyCount();
-
-            Player player = other.GetComponent<Player>();
-            if (player != null) { player.Damage(); }
+ 
+            if (_player != null) { _player.Damage(); }
             Destroy(this.gameObject);
             
         }
