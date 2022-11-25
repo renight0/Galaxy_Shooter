@@ -41,6 +41,7 @@ public class Enemy : MonoBehaviour
             
 
             spawnManager.DecreaseEnemyCount();
+            _player.EarnScorePoints(10);
 
             Destroy(this.gameObject);
             Destroy(other.gameObject);
@@ -54,7 +55,7 @@ public class Enemy : MonoBehaviour
             Player player = other.GetComponent<Player>();
             if (player != null) { player.Damage(); }
             Destroy(this.gameObject);
-                       
+            
         }
         
     }

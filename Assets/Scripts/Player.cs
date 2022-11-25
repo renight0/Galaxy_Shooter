@@ -46,7 +46,16 @@ public class Player : MonoBehaviour
 
     SpawnManager _spawnManager;
 
-    
+    [SerializeField] int _score;
+
+    public int Score
+    {
+        get { return _score; }
+
+        set { _score = value; }
+    }
+
+
 
     void Start()
     {
@@ -238,5 +247,11 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(12.1f, transform.position.y, 0);
         }
+    }
+
+    public void EarnScorePoints(int points)
+    {
+        Score += points;
+    
     }
 }

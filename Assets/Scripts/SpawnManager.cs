@@ -18,8 +18,6 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField] bool _stopSpawningpowerUp = false;
 
-
-
     Enemy _enemy;
 
     void Start()
@@ -47,6 +45,8 @@ public class SpawnManager : MonoBehaviour
     {
         _stopSpawningEnemies = true;
         _stopSpawningpowerUp = true;
+
+        
     }
 
     public void DecreaseEnemyCount()
