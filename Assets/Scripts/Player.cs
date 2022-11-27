@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] GameObject _laserPrefab;
     [SerializeField] GameObject _tripleShot;
-   
+
     [SerializeField] float _fireRate = 0.5f;
     float _timeUntilCanFireAgain = -1f;
 
@@ -55,21 +55,24 @@ public class Player : MonoBehaviour
         set { _score = value; }
     }
 
+    UI_Manager _UIManager;
 
 
     void Start()
     {
-        transform.position = new Vector3 (0,0,0);
-        
+        transform.position = new Vector3(0, 0, 0);
+
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
 
-        if(_spawnManager == null) 
+        if (_spawnManager == null)
         {
             Debug.Log("Spawn Manager is null!");
         }
 
         _shieldObject.GetComponent<Renderer>().enabled = false;
 
+        _UIManager = GameObject.Find("Canvas").GetComponent<UI_Manager>();
+ 
     }
 
 
@@ -79,44 +82,45 @@ public class Player : MonoBehaviour
         PlayerMovement();
         Fire();
 
+
     }
 
 
 
-    public void Damage()    
+    public void Damage()
     {
         if (_shield > 0)
         {
             _shield--;
-            BlinkHide(_shieldObject);
+            Blink(_shieldObject, 0.1f, true);
 
-            //HideShield();
-            //_shieldObject.GetComponent<Renderer>().enabled = false;
         }
         else if (_shield == 0)
         {
             _shieldObject.GetComponent<Renderer>().enabled = false;
 
             _lives--;
-            if (_lives == 0) 
+            _UIManager.UpdateLives(_lives);
+
+            if (_lives == 0)
             {
 
                 _spawnManager.OnPlayerDeathStopSpawning();
-           
-                Destroy (this.gameObject);
+
+                Destroy(this.gameObject);
+
             }
 
-            if (this.gameObject != null) 
+            if (this.gameObject != null)
             {
-                Blink(this.gameObject);
+                Blink(this.gameObject, 0.1f, false);
             }
         }
 
-        //_shieldObject.GetComponent<Renderer>().enabled = false;
 
     }
 
-    IEnumerator DamageBlinkRoutine(GameObject blinkObject, float blinkRate)
+    IEnumerator DamageBlinkRoutine(GameObject blinkObject, float blinkRate, bool hideAfterBlink)
     {
         blinkObject.GetComponent<Renderer>().enabled = false;
         yield return new WaitForSeconds(blinkRate);
@@ -129,27 +133,13 @@ public class Player : MonoBehaviour
         blinkObject.GetComponent<Renderer>().enabled = false;
         yield return new WaitForSeconds(blinkRate);
         blinkObject.GetComponent<Renderer>().enabled = true;
-        
-    }
-
-    IEnumerator HideBlinkRoutine(GameObject blinkObject, float blinkRate)
-    {
-        blinkObject.GetComponent<Renderer>().enabled = false;
-        yield return new WaitForSeconds(blinkRate);
-        blinkObject.GetComponent<Renderer>().enabled = true;
-        yield return new WaitForSeconds(blinkRate);
-        blinkObject.GetComponent<Renderer>().enabled = false;
-        yield return new WaitForSeconds(blinkRate);
-        blinkObject.GetComponent<Renderer>().enabled = true;
-        yield return new WaitForSeconds(blinkRate);
-        blinkObject.GetComponent<Renderer>().enabled = false;
-        yield return new WaitForSeconds(blinkRate);
-        blinkObject.GetComponent<Renderer>().enabled = true;
-        yield return new WaitForSeconds(blinkRate);
-        blinkObject.GetComponent<Renderer>().enabled = false;
+        if (hideAfterBlink == true)
+        {
+            blinkObject.GetComponent<Renderer>().enabled = false;
+        }
 
     }
-
+  
     IEnumerator ActivateTripleShotRoutine(float tripleShotDuration)
     {
         TripleShot = true;
@@ -182,19 +172,9 @@ public class Player : MonoBehaviour
         
     }
 
-    void HideShield()
-    {       
-        _shieldObject.GetComponent<Renderer>().enabled = false;
-    }
-
-    void Blink(GameObject blinkObject)
+    void Blink(GameObject blinkObject, float blinkRate, bool hideAfterBlink)
     {
-        StartCoroutine(DamageBlinkRoutine(blinkObject, 0.1f));
-    }
-
-    void BlinkHide(GameObject blinkObject)
-    {
-        StartCoroutine(HideBlinkRoutine(blinkObject, 0.1f));
+        StartCoroutine(DamageBlinkRoutine(blinkObject, blinkRate, hideAfterBlink));
     }
 
     void Fire() 
@@ -255,3 +235,4 @@ public class Player : MonoBehaviour
     
     }
 }
+
