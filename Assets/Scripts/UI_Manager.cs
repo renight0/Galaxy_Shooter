@@ -20,7 +20,10 @@ public class UI_Manager : MonoBehaviour
         _player = GameObject.FindWithTag("Player").GetComponent<Player>();
 
         _gameOverText = GameObject.Find("Game_Over_Text");
-        _gameOverText.SetActive(false);
+        if (_gameOverText != null)
+        {
+            _gameOverText.SetActive(false);
+        }
     }
 
 
