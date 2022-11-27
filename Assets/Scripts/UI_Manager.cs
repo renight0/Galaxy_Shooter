@@ -14,7 +14,10 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] Sprite[] _liveSprites;
 
     GameObject _gameOverText;
+    GameObject _restartText;
+    GameManager _gameManager;
 
+    
     void Start()
     {     
         _player = GameObject.FindWithTag("Player").GetComponent<Player>();
@@ -24,15 +27,25 @@ public class UI_Manager : MonoBehaviour
         {
             _gameOverText.SetActive(false);
         }
-    }
 
+        
+
+        _restartText = GameObject.Find("Restart_Text");
+        if (_restartText != null)
+        {
+            _restartText.SetActive(false);
+        }
+
+        _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+        
+    }
 
     void Update()
     {      
         _scoreText.text = "Score: " + _player.Score;
 
         gameOverFallDownOnScreenAfterDeath();
-        
+
     }
 
     public void UpdateLives(int currentLives)
@@ -56,8 +69,36 @@ public class UI_Manager : MonoBehaviour
             float gameOverYPos = _gameOverText.transform.position.y;
             if (gameOverYPos > 240f)
             {
-                _gameOverText.transform.Translate(Vector3.down * 40f * Time.deltaTime);
+                _gameOverText.transform.Translate(Vector3.down * 80f * Time.deltaTime);
+            }
+            else if (gameOverYPos <= 240f && _gameManager.GameOver == false)
+            {
+                _gameManager.GameOver = true;
+                StartCoroutine(BlinkRoutine(_gameOverText, 0.15f, false));
+            }
+            else if (gameOverYPos <= 240f && _gameManager.GameOver == true)
+            {
+                _restartText.SetActive(true);
+                return;
             }
         }
     }
+
+    IEnumerator BlinkRoutine(GameObject blinkObject, float blinkRate, bool hideAfterBlink)
+    {
+        blinkObject.SetActive(false);
+        yield return new WaitForSeconds(blinkRate);
+        blinkObject.SetActive(true);
+        yield return new WaitForSeconds(blinkRate);
+        blinkObject.SetActive(false);
+        yield return new WaitForSeconds(blinkRate);
+        blinkObject.SetActive(true);
+        yield return new WaitForSeconds(blinkRate);
+  
+        if (hideAfterBlink == true)
+        {
+            blinkObject.SetActive(false);
+        }     
+    }
+
 }

@@ -110,8 +110,7 @@ public class Player : MonoBehaviour
                 Destroy(this.gameObject);
 
             }
-
-            if (this.gameObject != null)
+            else if (this.gameObject != null && _lives>0)
             {
                 Blink(this.gameObject, 0.1f, false);
             }
