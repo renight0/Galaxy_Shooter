@@ -1341,7 +1341,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Press 'R' key to restart the game
+  m_Text: 'Press ''R'' key to restart the game
+
+
+    Press ''M'' key to go back to
+    the main menu'
 --- !u!222 &2062388284
 CanvasRenderer:
   m_ObjectHideFlags: 0

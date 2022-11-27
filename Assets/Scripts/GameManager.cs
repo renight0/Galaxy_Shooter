@@ -31,8 +31,12 @@ public class GameManager : MonoBehaviour
         if (GameOver == true && Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("Restart Level");
-            //SceneManager.
-            
+            SceneManager.LoadScene(1);
+        }
+        else if (GameOver == true && Input.GetKeyDown(KeyCode.M))
+        {
+            Debug.Log("Loading Main Menu");
+            SceneManager.LoadScene(0);
         }
     }
 }

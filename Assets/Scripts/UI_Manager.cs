@@ -15,6 +15,7 @@ public class UI_Manager : MonoBehaviour
 
     GameObject _gameOverText;
     GameObject _restartText;
+
     GameManager _gameManager;
 
     
@@ -23,7 +24,8 @@ public class UI_Manager : MonoBehaviour
         _player = GameObject.FindWithTag("Player").GetComponent<Player>();
 
         _gameOverText = GameObject.Find("Game_Over_Text");
-        if (_gameOverText != null)
+        if (_gameOverText == null) { Debug.Log("RestartText is NULL"); }
+        else if (_gameOverText != null)
         {
             _gameOverText.SetActive(false);
         }
@@ -31,13 +33,15 @@ public class UI_Manager : MonoBehaviour
         
 
         _restartText = GameObject.Find("Restart_Text");
-        if (_restartText != null)
+        if (_restartText == null) { Debug.Log("RestartText is NULL"); }
+        else if (_restartText != null)
         {
             _restartText.SetActive(false);
         }
 
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
-        
+        if (_gameManager == null) { Debug.Log("GameManager is NULL"); }
+     
     }
 
     void Update()
