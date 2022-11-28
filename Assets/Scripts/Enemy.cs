@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
 
     SpawnManager spawnManager;
 
+    Animator _animator;
+
     void Start()
     {
 
@@ -19,7 +21,10 @@ public class Enemy : MonoBehaviour
         transform.position = new Vector3(Random.Range(-10.6f, 10f), 7.5f, 0);
 
         _player = GameObject.FindWithTag("Player").GetComponent<Player>();
-     
+        if (_player == null) { Debug.LogError("Player is NULL"); }
+
+        _animator = GetComponent<Animator>();
+        if (_animator == null) { Debug.LogError("Animator is NULL"); }
     }
 
   
@@ -41,10 +46,9 @@ public class Enemy : MonoBehaviour
             
             spawnManager.DecreaseEnemyCount();
             if (_player != null) { _player.EarnScorePoints(10); }
-            
-            Destroy(this.gameObject);
-            Destroy(other.gameObject);
 
+            Destroy(other.gameObject);
+            EnemyDeath();          
         }
         else if (other.transform.tag == "Player")
         {
@@ -52,8 +56,8 @@ public class Enemy : MonoBehaviour
             spawnManager.DecreaseEnemyCount();
  
             if (_player != null) { _player.Damage(); }
-            Destroy(this.gameObject);
-            
+            EnemyDeath();
+
         }
         
     }
@@ -76,5 +80,12 @@ public class Enemy : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+    }
+
+    void EnemyDeath()
+    {
+        _animator.SetTrigger("OnEnemyDeath");
+        _speed = 0f;
+        Destroy(this.gameObject, 2.8f);
     }
 }

@@ -115,8 +115,6 @@ public class Player : MonoBehaviour
                 Blink(this.gameObject, 0.1f, false);
             }
         }
-
-
     }
 
     IEnumerator DamageBlinkRoutine(GameObject blinkObject, float blinkRate, bool hideAfterBlink)
