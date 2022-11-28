@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7189754051975825345}
   - component: {fileID: 1765838242987357681}
   - component: {fileID: 4394299340273540080}
+  - component: {fileID: 7490799132400029769}
   m_Layer: 0
   m_Name: Asteroid
   m_TagString: Untagged
@@ -31,8 +32,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 4.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 1126325766965795791}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -138,71 +138,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rotateSpeed: 3
---- !u!1001 &8623152111090244572
-PrefabInstance:
+--- !u!95 &7490799132400029769
+Animator:
+  serializedVersion: 4
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 2
-    m_TransformParent: {fileID: 2915575056125256038}
-    m_Modifications:
-    - target: {fileID: 5042036512963317651, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-      propertyPath: m_Name
-      value: Explosion
-      objectReference: {fileID: 0}
-    - target: {fileID: 5042036512963317651, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8649748544525959187, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-      propertyPath: m_RootOrder
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 8649748544525959187, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8649748544525959187, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8649748544525959187, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8649748544525959187, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8649748544525959187, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8649748544525959187, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8649748544525959187, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8649748544525959187, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8649748544525959187, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8649748544525959187, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_AddedGameObjects: []
-  m_SourcePrefab: {fileID: 100100000, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
---- !u!4 &1126325766965795791 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8649748544525959187, guid: 284a0a096fb07004793af9ab0f710d24, type: 3}
-  m_PrefabInstance: {fileID: 8623152111090244572}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4899280624543844591}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a8b0eb0b2cdc460418190dac1257378e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

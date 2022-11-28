@@ -6,20 +6,14 @@ public class Asteroid : MonoBehaviour
 {
 
     [SerializeField] float _rotateSpeed = 3.0f;
-
-    Transform _explosionTransform;
-    GameObject _explosionObject;
-    Animator _explosionAnimator;
-
+    
+    Animator _asteroidAnimator;
     Player _player;
 
     void Start()
     {
-        _explosionTransform = gameObject.transform.Find("Explosion");
-        _explosionObject = _explosionTransform.gameObject;
-        _explosionAnimator = _explosionObject.GetComponent<Animator>();
 
-        _explosionObject.SetActive(false);
+        _asteroidAnimator = transform.GetComponent<Animator>();
 
         _player = GameObject.Find("Player").GetComponent<Player>();
     }
@@ -27,18 +21,25 @@ public class Asteroid : MonoBehaviour
     
     void Update()
     {
-        transform.Rotate(Vector3.forward * _rotateSpeed * Time.deltaTime);
+        if (_asteroidAnimator.GetBool("OnAsteroidDestruction") == false)
+        {
+            transform.Rotate(Vector3.forward * _rotateSpeed * Time.deltaTime);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.transform.tag == "Player" || other.transform.tag == "Laser")
         {
-            _explosionObject.SetActive(true);
-            _explosionAnimator.SetTrigger("OnAsteroidDestruction");
+          
+            _asteroidAnimator.SetTrigger("OnAsteroidDestruction");
             if (other.transform.tag == "Player")
             {
                 _player.Damage();
+            }
+            else if (other.transform.tag == "Laser")
+            {
+                Destroy(other.gameObject);
             }
             Destroy(this.gameObject, 2.2f);
         }
