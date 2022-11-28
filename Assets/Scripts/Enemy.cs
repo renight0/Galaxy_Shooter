@@ -14,6 +14,10 @@ public class Enemy : MonoBehaviour
 
     Animator _animator;
 
+    Transform _leftThruster, _rightThruster;
+
+
+
     void Start()
     {
 
@@ -25,6 +29,9 @@ public class Enemy : MonoBehaviour
 
         _animator = GetComponent<Animator>();
         if (_animator == null) { Debug.LogError("Animator is NULL"); }
+
+        _leftThruster = transform.Find("Thruster_L");
+        _rightThruster = transform.Find("Thruster_R");
     }
 
   
@@ -86,6 +93,8 @@ public class Enemy : MonoBehaviour
     {
         _animator.SetTrigger("OnEnemyDeath");
         _speed = 0f;
+        _leftThruster.gameObject.SetActive(false);
+        _rightThruster.gameObject.SetActive(false);
         Destroy(this.gameObject, 2.8f);
     }
 }

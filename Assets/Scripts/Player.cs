@@ -55,6 +55,10 @@ public class Player : MonoBehaviour
         set { _score = value; }
     }
 
+    Transform _leftDamageTransform, _rightDamageTransform;
+
+    int _damageSideRandomNumber;
+    
     UI_Manager _UIManager;
 
 
@@ -72,7 +76,15 @@ public class Player : MonoBehaviour
         _shieldObject.GetComponent<Renderer>().enabled = false;
 
         _UIManager = GameObject.Find("Canvas").GetComponent<UI_Manager>();
- 
+
+        _leftDamageTransform = gameObject.transform.Find("Damage_Effect_L");
+        _rightDamageTransform = gameObject.transform.Find("Damage_Effect_R");
+
+        _leftDamageTransform.gameObject.SetActive(false);
+        _rightDamageTransform.gameObject.SetActive(false);
+
+        _damageSideRandomNumber = Random.Range(0, 2);
+        Debug.Log("_damageSideRandomNumber =" + _damageSideRandomNumber);
     }
 
 
@@ -100,6 +112,7 @@ public class Player : MonoBehaviour
             _shieldObject.GetComponent<Renderer>().enabled = false;
 
             _lives--;
+            DamageEffect();
             _UIManager.UpdateLives(_lives);
 
             if (_lives == 0)
@@ -115,6 +128,39 @@ public class Player : MonoBehaviour
                 Blink(this.gameObject, 0.1f, false);
             }
         }
+    }
+
+    void DamageEffect()
+    {
+        switch (Lives)
+        {
+            case 0:              
+                break;
+            case 1:
+                
+                if (_damageSideRandomNumber == 0)
+                {
+                    _leftDamageTransform.gameObject.SetActive(true);
+                }
+                else if (_damageSideRandomNumber == 1)
+                {
+                    _rightDamageTransform.gameObject.SetActive(true);
+                }
+
+                break;
+            case 2:
+                if (_damageSideRandomNumber == 0)
+                {
+                    _rightDamageTransform.gameObject.SetActive(true);
+                }
+                else if (_damageSideRandomNumber == 1)
+                {
+                    _leftDamageTransform.gameObject.SetActive(true);
+                }
+                break;
+        }
+
+
     }
 
     IEnumerator DamageBlinkRoutine(GameObject blinkObject, float blinkRate, bool hideAfterBlink)
