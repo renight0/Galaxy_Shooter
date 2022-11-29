@@ -8,6 +8,10 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] GameObject _enemyPrefab;
     [SerializeField] GameObject _enemyContainer;
 
+    [SerializeField] GameObject _asteroidPrefab;
+    [SerializeField] GameObject _asteroidContainer;
+
+
     [SerializeField] int _enemiesCount = 0;
 
     [SerializeField] GameObject[] _PowerUpPrefabs;
@@ -20,11 +24,18 @@ public class SpawnManager : MonoBehaviour
 
     Enemy _enemy;
 
+    [SerializeField] int _spawnMultiplier = 1;
+
     void Start()
     {
-        
-        StartCoroutine(SpawnEnemiesRoutine());
-        StartCoroutine(SpawnPowerUpRoutine());     
+        if (_spawnMultiplier == 0) { _spawnMultiplier = 1; }
+
+
+        StartCoroutine(SpawnEnemiesRoutine());   
+
+        StartCoroutine(SpawnPowerUpRoutine());
+
+        StartCoroutine(SpawnAsteroidsRoutine());
     }
 
     IEnumerator SpawnEnemiesRoutine()
@@ -32,12 +43,30 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawningEnemies == false) 
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
-            newEnemy.transform.parent = _enemyContainer.transform;
+            for (int i = 0; i < _spawnMultiplier; i++)
+            {
+                GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
+                newEnemy.transform.parent = _enemyContainer.transform;
+            }
+            //GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
+            //newEnemy.transform.parent = _enemyContainer.transform;
 
             _enemiesCount++;
             yield return new WaitForSeconds(5.0f);
            
+        }
+
+    }
+
+    IEnumerator SpawnAsteroidsRoutine()
+    {
+        while (_stopSpawningEnemies == false)
+        {
+            Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
+            GameObject newAsteroid = Instantiate(_asteroidPrefab, posToSpawn, Quaternion.identity);
+            newAsteroid.transform.parent = _asteroidContainer.transform;
+     
+            yield return new WaitForSeconds(5.0f);
         }
 
     }

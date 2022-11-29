@@ -6,26 +6,71 @@ public class Asteroid : MonoBehaviour
 {
 
     [SerializeField] float _rotateSpeed = 3.0f;
-    
+    [SerializeField] float _speed = 2.5f;
+    [SerializeField] int _moveSide = 0;
+
     Animator _asteroidAnimator;
     Player _player;
+
+    bool _isPlayerDead;
 
     void Start()
     {
 
+        _isPlayerDead = false;
+
         _asteroidAnimator = transform.GetComponent<Animator>();
 
         _player = GameObject.Find("Player").GetComponent<Player>();
+
+        _moveSide = Random.Range(-1, 2);
+        Debug.Log(_moveSide);
+        gameObject.transform.localScale = Random.Range(0.4f, 1.1f)*Vector3.one;
     }
 
     
     void Update()
     {
+        AsteroidMovement();
+
+        AsteroidMovementLoop();
+
+
+    }
+    void AsteroidMovement()
+    {
         if (_asteroidAnimator.GetBool("OnAsteroidDestruction") == false)
         {
-            transform.Rotate(Vector3.forward * _rotateSpeed * Time.deltaTime);
+            transform.Rotate(Vector3.forward * _rotateSpeed * Random.Range(1f, 3.5f) * Time.deltaTime);
+            transform.Translate((Vector3.down + (Vector3.right * _moveSide)) * _speed * Time.deltaTime);
+        }
+        else if (_asteroidAnimator.GetBool("OnAsteroidDestruction") == true)
+        {
+            _speed = 0f;
         }
     }
+
+    void AsteroidMovementLoop()
+    {
+
+        if (transform.position.y < -6 && _isPlayerDead == false)
+        {
+            transform.position = new Vector3(Random.Range(-10.5f, 10.1f), 7.5f, 0);
+        }
+        else if (transform.position.y < -6 && _isPlayerDead == true)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    void IsPlayerDead()
+    {
+        if (_player.Lives == 0)
+        {
+            _isPlayerDead = true;
+        }
+    }
+
 
     void OnTriggerEnter2D(Collider2D other)
     {

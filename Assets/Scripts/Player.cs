@@ -56,10 +56,13 @@ public class Player : MonoBehaviour
     }
 
     Transform _leftDamageTransform, _rightDamageTransform;
+    Transform _thrusterTransform;
 
     int _damageSideRandomNumber;
     
     UI_Manager _UIManager;
+
+    Animator _animator;
 
 
     void Start()
@@ -85,6 +88,9 @@ public class Player : MonoBehaviour
 
         _damageSideRandomNumber = Random.Range(0, 2);
         Debug.Log("_damageSideRandomNumber =" + _damageSideRandomNumber);
+
+        _thrusterTransform = gameObject.transform.Find("Thruster");
+        _animator = GetComponent<Animator>();
     }
 
 
@@ -104,7 +110,7 @@ public class Player : MonoBehaviour
         if (_shield > 0)
         {
             _shield--;
-            Blink(_shieldObject, 0.1f, true);
+            Blink(_shieldObject, 0.1f, true, 1);
 
         }
         else if (_shield == 0)
@@ -119,13 +125,16 @@ public class Player : MonoBehaviour
             {
 
                 _spawnManager.OnPlayerDeathStopSpawning();
-
-                Destroy(this.gameObject);
+                _animator.SetTrigger("OnPlayerDeath");
+                Destroy(_leftDamageTransform.gameObject);
+                Destroy(_rightDamageTransform.gameObject);
+                Destroy(_thrusterTransform.gameObject);
+                Destroy(this.gameObject, 2.8f);
 
             }
             else if (this.gameObject != null && _lives>0)
             {
-                Blink(this.gameObject, 0.1f, false);
+                Blink(this.gameObject, 0.1f, false, 1);
             }
         }
     }
@@ -158,31 +167,56 @@ public class Player : MonoBehaviour
                     _leftDamageTransform.gameObject.SetActive(true);
                 }
                 break;
+            default:
+                break;
         }
 
 
     }
 
-    IEnumerator DamageBlinkRoutine(GameObject blinkObject, float blinkRate, bool hideAfterBlink)
+    IEnumerator DamageBlinkWithChildrenRoutine(GameObject blinkObject, float blinkRate, bool hideAfterBlink, int skipUntilChildNumber)
     {
+
+        int numberOfChildren = blinkObject.transform.childCount;
+
+        BlinkChildren(blinkObject, numberOfChildren, skipUntilChildNumber, false);
         blinkObject.GetComponent<Renderer>().enabled = false;
         yield return new WaitForSeconds(blinkRate);
+
+        BlinkChildren(blinkObject, numberOfChildren, skipUntilChildNumber, true);
         blinkObject.GetComponent<Renderer>().enabled = true;
         yield return new WaitForSeconds(blinkRate);
+
+        BlinkChildren(blinkObject, numberOfChildren, skipUntilChildNumber, false);
         blinkObject.GetComponent<Renderer>().enabled = false;
         yield return new WaitForSeconds(blinkRate);
+
+        BlinkChildren(blinkObject, numberOfChildren, skipUntilChildNumber, true);
         blinkObject.GetComponent<Renderer>().enabled = true;
         yield return new WaitForSeconds(blinkRate);
+
+        BlinkChildren(blinkObject, numberOfChildren, skipUntilChildNumber, false);
         blinkObject.GetComponent<Renderer>().enabled = false;
         yield return new WaitForSeconds(blinkRate);
+
+        BlinkChildren(blinkObject, numberOfChildren, skipUntilChildNumber, true);
         blinkObject.GetComponent<Renderer>().enabled = true;
+
         if (hideAfterBlink == true)
         {
             blinkObject.GetComponent<Renderer>().enabled = false;
         }
 
     }
-  
+
+    void BlinkChildren(GameObject parentObject, int numberOfChildren, int skipUntilChildNumber, bool isRendererEnabled)
+    {
+        for (int i = skipUntilChildNumber; i < numberOfChildren; i++)
+        {
+            parentObject.transform.GetChild(i).GetComponent<Renderer>().enabled = isRendererEnabled;
+        }
+    }
+
     IEnumerator ActivateTripleShotRoutine(float tripleShotDuration)
     {
         TripleShot = true;
@@ -215,10 +249,12 @@ public class Player : MonoBehaviour
         
     }
 
-    void Blink(GameObject blinkObject, float blinkRate, bool hideAfterBlink)
+    void Blink(GameObject blinkObject, float blinkRate, bool hideAfterBlink, int skipUntilChildNumber)
     {
-        StartCoroutine(DamageBlinkRoutine(blinkObject, blinkRate, hideAfterBlink));
+        StartCoroutine(DamageBlinkWithChildrenRoutine(blinkObject, blinkRate, hideAfterBlink, skipUntilChildNumber));
     }
+
+
 
     void Fire() 
     {
@@ -240,11 +276,13 @@ public class Player : MonoBehaviour
 
     void PlayerMovement()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-        Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
-        transform.Translate(direction * _speed * Time.deltaTime);
-
+        if (Lives > 0)
+        { 
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
+            Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
+            transform.Translate(direction * _speed * Time.deltaTime);
+        }
         MovementBoundaries();
     }
 
