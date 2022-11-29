@@ -313,7 +313,7 @@ public class Player : MonoBehaviour
     public void EarnScorePoints(int points)
     {
         Score += points;
-    
+        
     }
 }
 
