@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
 
     Transform _leftThruster, _rightThruster;
 
-
+    bool _isEnemyDying;
 
     void Start()
     {
@@ -32,6 +32,8 @@ public class Enemy : MonoBehaviour
 
         _leftThruster = transform.Find("Thruster_L");
         _rightThruster = transform.Find("Thruster_R");
+
+        _isEnemyDying = false;
     }
 
   
@@ -52,10 +54,14 @@ public class Enemy : MonoBehaviour
         {
             
             spawnManager.DecreaseEnemyCount();
-            if (_player != null) { _player.EarnScorePoints(10); }
+            if (_player != null && _isEnemyDying == false) 
+            { 
+                _player.EarnScorePoints(10);
+                _isEnemyDying = true;
+            }
 
             Destroy(other.gameObject);
-            EnemyDeath();          
+            EnemyDeath();         
         }
         else if (other.transform.tag == "Player")
         {
