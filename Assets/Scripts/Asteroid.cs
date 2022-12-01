@@ -14,6 +14,11 @@ public class Asteroid : MonoBehaviour
 
     bool _isPlayerDead;
 
+    bool _isAsteroidExploding;
+
+    [SerializeField] AudioClip _explosion;
+    AudioSource _audioSource;
+
     void Start()
     {
 
@@ -26,6 +31,11 @@ public class Asteroid : MonoBehaviour
         _moveSide = Random.Range(-1, 2);
         Debug.Log(_moveSide);
         gameObject.transform.localScale = Random.Range(0.4f, 1.1f)*Vector3.one;
+
+        _audioSource = GetComponent<AudioSource>();
+        _audioSource.clip = _explosion;
+
+        _isAsteroidExploding = false;
     }
 
     
@@ -86,7 +96,14 @@ public class Asteroid : MonoBehaviour
             {
                 Destroy(other.gameObject);
             }
+            
+            if (_isAsteroidExploding == false)
+            {
+                _audioSource.Play();
+                _isAsteroidExploding = true;
+            }
+            
             Destroy(this.gameObject, 2.2f);
-        }
+        }    
     }
 }   

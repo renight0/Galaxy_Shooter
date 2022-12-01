@@ -64,6 +64,8 @@ public class Player : MonoBehaviour
 
     Animator _animator;
 
+    [SerializeField] AudioClip _laserSoundClip, _explosionSoundClip;
+    AudioSource _audioSource;
 
     void Start()
     {
@@ -91,6 +93,9 @@ public class Player : MonoBehaviour
 
         _thrusterTransform = gameObject.transform.Find("Thruster");
         _animator = GetComponent<Animator>();
+
+        _audioSource = GetComponent<AudioSource>();
+        _audioSource.clip = _laserSoundClip;
     }
 
 
@@ -129,6 +134,8 @@ public class Player : MonoBehaviour
                 Destroy(_leftDamageTransform.gameObject);
                 Destroy(_rightDamageTransform.gameObject);
                 Destroy(_thrusterTransform.gameObject);
+                _audioSource.clip = _explosionSoundClip;
+                _audioSource.Play();
                 Destroy(this.gameObject, 2.8f);
 
             }
@@ -261,17 +268,20 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _timeUntilCanFireAgain)
         {
             _timeUntilCanFireAgain = Time.time + _fireRate;
-
+           
             switch (_isTripleShotActive)
             {
                 case false:
                     Instantiate(_laserPrefab, transform.position, Quaternion.identity);
                     break;
                 case true:
-                    Instantiate(_tripleShot, transform.position, Quaternion.identity);
+                    Instantiate(_tripleShot, transform.position, Quaternion.identity);                  
                     break;
-            }           
+            }
+
+            _audioSource.Play();
         }
+        
     }
 
     void PlayerMovement()

@@ -17,6 +17,8 @@ public class Enemy : MonoBehaviour
     Transform _leftThruster, _rightThruster;
 
     bool _isEnemyDying;
+    [SerializeField] AudioClip _explosionSoundClip;
+    AudioSource _audioSource;
 
     void Start()
     {
@@ -34,6 +36,8 @@ public class Enemy : MonoBehaviour
         _rightThruster = transform.Find("Thruster_R");
 
         _isEnemyDying = false;
+
+        _audioSource = GetComponent<AudioSource>();
     }
 
   
@@ -58,6 +62,8 @@ public class Enemy : MonoBehaviour
             { 
                 _player.EarnScorePoints(10);
                 _isEnemyDying = true;
+                _audioSource.clip = _explosionSoundClip;
+                _audioSource.Play();
             }
 
             Destroy(other.gameObject);
@@ -67,8 +73,16 @@ public class Enemy : MonoBehaviour
         {
             //Debug.Log("Player loses health");
             spawnManager.DecreaseEnemyCount();
- 
+            
             if (_player != null) { _player.Damage(); }
+
+            if (_player != null && _isEnemyDying == false)
+            {
+                
+                _isEnemyDying = true;
+                _audioSource.clip = _explosionSoundClip;
+                _audioSource.Play();
+            }
             EnemyDeath();
 
         }
@@ -101,6 +115,8 @@ public class Enemy : MonoBehaviour
         _speed = 0f;
         _leftThruster.gameObject.SetActive(false);
         _rightThruster.gameObject.SetActive(false);
+
+ 
         Destroy(this.gameObject, 2.8f);
     }
 }
