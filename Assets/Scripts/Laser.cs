@@ -27,41 +27,64 @@ public class Laser : MonoBehaviour
 
         _player = GameObject.Find("Player").GetComponent<Player>();
 
-        if (_player.TripleShot == true)
-        { 
-        _laserParent = gameObject.transform.parent.gameObject;
+        if (_player != null)
+        {
+            if (_player.TripleShot == true)
+            {
+                _laserParent = gameObject.transform.parent.gameObject;
+            }
         }
+        else { Debug.Log("Player is NULL"); }
 
-        //if (transform.parent)
-        
+  
     }
 
    
     void Update()
     {
-        if (EnemyLaser == false)
-        { 
-            transform.position += Vector3.up * _laserSpeed * Time.deltaTime; 
-        }
-        else if (EnemyLaser == true)
-        { 
-            transform.position -= Vector3.up * _laserSpeed * Time.deltaTime; 
-        }
+        LaserMovement();
 
-        if (transform.position.y > 8 || transform.position.y < -5.9f)
-        {           
-            if (_laserParent != null)
-            {
-                Destroy(_laserParent);
-            }
+        DestroyOutOfBoundsLaser();
 
-            Destroy(this.gameObject);
-        }        
     }
 
     public void AssignEnemyLaser()
     { 
         _isEnemylaser = true;
+    }
+
+    void LaserMovement()
+    {
+        if (EnemyLaser == false)
+        {
+            transform.position += Vector3.up * _laserSpeed * Time.deltaTime;
+        }
+        else if (EnemyLaser == true)
+        {
+            transform.position -= Vector3.up * _laserSpeed * Time.deltaTime;
+        }
+    }
+
+    void DestroyOutOfBoundsLaser()
+    {
+        if (transform.position.y > 8 || transform.position.y < -5.9f)
+        {
+            if (_laserParent != null)
+            {
+                Destroy(_laserParent);
+            }
+
+            if(_isEnemylaser == true)
+            {
+                GameObject enemyLaserParent = transform.parent.gameObject;
+                if (enemyLaserParent != null)
+                {
+                    Destroy(enemyLaserParent);
+                }
+            }
+
+            Destroy(this.gameObject);
+        }
     }
 
 }

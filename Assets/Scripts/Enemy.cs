@@ -46,8 +46,6 @@ public class Enemy : MonoBehaviour
 
         _audioSource = GetComponent<AudioSource>();
 
-        //_laserScript = _laser.GetComponent<Laser>();
-        //_laserScript.EnemyLaser = true;
     }
 
   
@@ -59,26 +57,13 @@ public class Enemy : MonoBehaviour
 
         EnemyMovementLoop();
 
-        if (Time.time > _canFire)
-        {
-            _fireRate = Random.Range(3f, 7f);
-            _canFire = Time.time + _fireRate;
-            GameObject enemyLaser = Instantiate(_enemyLasersPrefab, transform.position + new Vector3(0, -3f, 0), Quaternion.identity);
-            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
-
-            int numberOfChildren = transform.childCount;
-            for (int i = 0; i < numberOfChildren; i++)
-            {
-                lasers[i].AssignEnemyLaser();
-            }
-            
-        }
+        EnemyFire();
 
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        //Debug.Log("Hit: " + other.transform.name);
+
         if (other.transform.tag == "Laser")
         {
             
@@ -89,14 +74,14 @@ public class Enemy : MonoBehaviour
                 _isEnemyDying = true;
                 _audioSource.clip = _explosionSoundClip;
                 _audioSource.Play();
+                Destroy(other.gameObject);
             }
-
-            Destroy(other.gameObject);
+           
             EnemyDeath();         
         }
         else if (other.transform.tag == "Player")
         {
-            //Debug.Log("Player loses health");
+
             spawnManager.DecreaseEnemyCount();
             
             if (_player != null) { _player.Damage(); }
@@ -134,7 +119,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void EnemyDeath()
+    public void EnemyDeath()
     {
         _animator.SetTrigger("OnEnemyDeath");
         _speed = 0f;
@@ -147,6 +132,27 @@ public class Enemy : MonoBehaviour
 
     void EnemyFire()
     {
-        Instantiate(_enemyLasersPrefab, transform.position + new Vector3(0, -1.90f, 0), Quaternion.identity);
+        if (Time.time > _canFire && _isEnemyDying == false)
+        {
+            _fireRate = Random.Range(3f, 7f);
+            if (_player.Lives > 0)
+            {
+                _canFire = Time.time + _fireRate;
+            }
+            else if (_player.Lives <= 0 || _player == null)
+            {
+                return;
+            }
+            
+            GameObject enemyLaser = Instantiate(_enemyLasersPrefab, transform.position + new Vector3(0, -3f, 0), Quaternion.identity);
+            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+
+
+            for (int i = 0; i < lasers.Length; i++)
+            {
+                lasers[i].AssignEnemyLaser();
+            }
+
+        }
     }
 }

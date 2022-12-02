@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Player : MonoBehaviour
 {
@@ -123,7 +124,7 @@ public class Player : MonoBehaviour
             _shieldObject.GetComponent<Renderer>().enabled = false;
 
             _lives--;
-            DamageEffect();
+            DamageVisualEffect();
             _UIManager.UpdateLives(_lives);
 
             if (_lives == 0)
@@ -146,7 +147,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void DamageEffect()
+    void DamageVisualEffect()
     {
         switch (Lives)
         {
@@ -325,5 +326,15 @@ public class Player : MonoBehaviour
         Score += points;
         
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Laser enemyLaserScript = other.GetComponent<Laser>();
+        if (other.transform.tag == "Laser" & enemyLaserScript.EnemyLaser == true)
+        {
+            Damage();
+        }
+    }
+
 }
 

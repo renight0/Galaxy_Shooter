@@ -68,7 +68,7 @@ public class UI_Manager : MonoBehaviour
 
     void gameOverFallDownOnScreenAfterDeath()
     {  
-        if (_player.Lives == 0)
+        if (_player.Lives <= 0)
         {
             float gameOverYPos = _gameOverText.transform.position.y;
             if (gameOverYPos > 240f)

@@ -73,18 +73,10 @@ public class Asteroid : MonoBehaviour
         }
     }
 
-    void IsPlayerDead()
-    {
-        if (_player.Lives == 0)
-        {
-            _isPlayerDead = true;
-        }
-    }
-
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.transform.tag == "Player" || other.transform.tag == "Laser")
+        if (other.transform.tag == "Player" || other.transform.tag == "Laser" || other.transform.tag == "Enemy")
         {
           
             _asteroidAnimator.SetTrigger("OnAsteroidDestruction");
@@ -92,11 +84,16 @@ public class Asteroid : MonoBehaviour
             {
                 _player.Damage();
             }
-            else if (other.transform.tag == "Laser")
+            else if (other.transform.tag == "Laser" && _isAsteroidExploding == false)
             {
                 Destroy(other.gameObject);
             }
-            
+            else if (other.transform.tag == "Enemy" && _isAsteroidExploding == false)
+            {
+                Enemy enemyScript = other.gameObject.GetComponent<Enemy>();
+                enemyScript.EnemyDeath();
+            }
+
             if (_isAsteroidExploding == false)
             {
                 _audioSource.Play();
