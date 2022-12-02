@@ -265,7 +265,7 @@ public class Player : MonoBehaviour
 
     void Fire() 
     {
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _timeUntilCanFireAgain)
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _timeUntilCanFireAgain && Lives>0)
         {
             _timeUntilCanFireAgain = Time.time + _fireRate;
            

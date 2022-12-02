@@ -18,8 +18,7 @@ public class PowerUp : MonoBehaviour
     string _powerUpName;
 
     [SerializeField] AudioClip _powerUpSoundClip;
-    AudioSource _audioSource;
-
+    
     void Awake()
     {
         transform.position = new Vector3(Random.Range(-10.6f, 10f), 7.5f, 0);
@@ -40,9 +39,6 @@ public class PowerUp : MonoBehaviour
                 _powerUpID = 2;
                 break;
         }
-
-        _audioSource = GetComponent<AudioSource>();
-        _audioSource.clip = _powerUpSoundClip;
 
     }
 
@@ -69,7 +65,7 @@ public class PowerUp : MonoBehaviour
                     Debug.Log("Got Triple Shot PowerUp");
                     break;
                 case 1:
-                    player.ActivateSpeed(1.3f , _speedBoostDuration);
+                    player.ActivateSpeed(1.15f , _speedBoostDuration);
                     Debug.Log("Got Speed PowerUp");
                     break;
                 case 2:
@@ -80,7 +76,7 @@ public class PowerUp : MonoBehaviour
                     break;
             }
 
-            _audioSource.Play();
+            AudioSource.PlayClipAtPoint(_powerUpSoundClip, transform.position, 10000f);
             Destroy(this.gameObject);          
         }
     }

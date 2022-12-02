@@ -11,7 +11,15 @@ public class Laser : MonoBehaviour
     GameObject _laserParent;
     Player _player;
 
-   
+    bool _isEnemylaser = false;
+
+    public bool EnemyLaser
+    {
+        get { return _isEnemylaser; }
+
+        set { _isEnemylaser = value; }
+    }
+
 
     void Awake()
     {
@@ -23,14 +31,24 @@ public class Laser : MonoBehaviour
         { 
         _laserParent = gameObject.transform.parent.gameObject;
         }
+
+        //if (transform.parent)
+        
     }
 
    
     void Update()
     {
-        transform.position += Vector3.up * _laserSpeed * Time.deltaTime;
+        if (EnemyLaser == false)
+        { 
+            transform.position += Vector3.up * _laserSpeed * Time.deltaTime; 
+        }
+        else if (EnemyLaser == true)
+        { 
+            transform.position -= Vector3.up * _laserSpeed * Time.deltaTime; 
+        }
 
-        if (transform.position.y > 8)
+        if (transform.position.y > 8 || transform.position.y < -5.9f)
         {           
             if (_laserParent != null)
             {
@@ -38,11 +56,13 @@ public class Laser : MonoBehaviour
             }
 
             Destroy(this.gameObject);
-        }
-        
+        }        
     }
 
-
+    public void AssignEnemyLaser()
+    { 
+        _isEnemylaser = true;
+    }
 
 }
 
